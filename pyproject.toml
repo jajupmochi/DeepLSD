@@ -32,6 +32,10 @@ dependencies = [
 pytlsd = { git = "https://github.com/iago-suarez/pytlsd.git", rev = "4180ab8" }
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["scikit-build", "setuptools", "wheel", "pybind11", "cmake"]
+build-backend = "setuptools.build_meta"
+
+# [build-system]
+# requires = ["hatchling"]
+# build-backend = "hatchling.build"
 
