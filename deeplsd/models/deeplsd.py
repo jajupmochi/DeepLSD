@@ -14,7 +14,6 @@ from ..geometry.line_utils import (merge_lines, get_line_orientation,
 from ..geometry.homography_adaptation import torch_homography_adaptation
 from ..utils.tensor import preprocess_angle
 from pytlsd import lsd
-from line_refinement import line_optim
 
 
 class DeepLSD(BaseModel):
@@ -158,6 +157,8 @@ class DeepLSD(BaseModel):
         """ Detect lines from the offset field and potentially the line angle.
             Offer the possibility to ignore line in high DF values, to merge
             close-by lines and to optimize them to better fit the DF + angle. """
+        from line_refinement import line_optim
+            
         gradnorm = np.maximum(5 - df, 0).astype(np.float64)
         angle = line_level.astype(np.float64) - np.pi / 2
         angle = preprocess_angle(angle, img, mask=True)[0]
