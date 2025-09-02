@@ -156,9 +156,7 @@ class DeepLSD(BaseModel):
         grad_nfa=True):
         """ Detect lines from the offset field and potentially the line angle.
             Offer the possibility to ignore line in high DF values, to merge
-            close-by lines and to optimize them to better fit the DF + angle. """
-        from line_refinement import line_optim
-            
+            close-by lines and to optimize them to better fit the DF + angle. """            
         gradnorm = np.maximum(5 - df, 0).astype(np.float64)
         angle = line_level.astype(np.float64) - np.pi / 2
         angle = preprocess_angle(angle, img, mask=True)[0]
@@ -183,6 +181,10 @@ class DeepLSD(BaseModel):
         vps = np.array([])
         vp_labels = np.array([-1] * len(lines))
         if optimize:
+            # We move this import here as a monkey-patch, as currently this module needs to be built via pybind11 
+            # and can not be correctly installed when using .toml (uv)-style. Before this problem is solved, setting `optimize` to false will work.
+            from line_refinement import line_optim
+
             if merge:
                 lines = merge_lines(lines, thresh=4,
                                     overlap_thresh=0).astype(np.float32)
